@@ -1,5 +1,7 @@
 const Problem = require("../models/Problem");
 const Topic = require("../models/Topic");
+const Roadmap = require("../models/Roadmap");
+const Notification = require("../models/Notification");
 
 const getStartOfUtcDay = (date) => {
     return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
@@ -34,10 +36,11 @@ const getDashboardStats = async (req, res, next) => {
         const [
             solvedProblems,
             solvedToday,
-            upcomingTasks,
+            roadmaps,
             revisionCount,
             recentSolvedProblems,
-            recentUpdatedTopics
+            recentUpdatedTopics,
+            dueRevisionTopics
         ] = await Promise.all([
             Problem.find({
                 user: req.user._id,
@@ -49,10 +52,10 @@ const getDashboardStats = async (req, res, next) => {
                 status: "solved",
                 solvedAt: { $gte: startOfToday, $lt: startOfTomorrow }
             }),
-            Topic.find({
+            Roadmap.find({
                 user: req.user._id,
-                revisionDate: { $gte: startOfToday, $lte: upcomingDeadline }
-            }).select("name revisionDate progress difficulty").sort({ revisionDate: 1 }),
+                items: { $elemMatch: { completed: false, targetDate: { $gte: startOfToday, $lte: upcomingDeadline } } }
+            }).select("title type items"),
             Topic.countDocuments({
                 user: req.user._id,
                 revisionDate: { $exists: true, $ne: null, $lte: endOfToday }
@@ -65,8 +68,38 @@ const getDashboardStats = async (req, res, next) => {
             Topic.find({ user: req.user._id })
                 .select("name updatedAt progress")
                 .sort({ updatedAt: -1 })
-                .limit(5)
+                .limit(5),
+            Topic.find({
+                user: req.user._id,
+                revisionDate: { $exists: true, $ne: null, $lte: endOfToday }
+            }).select("name revisionDate")
         ]);
+
+        const upcomingTasks = roadmaps
+            .flatMap((roadmap) => roadmap.items
+                .filter((item) => !item.completed && item.targetDate >= startOfToday && item.targetDate <= upcomingDeadline)
+                .map((item) => ({
+                    _id: item._id,
+                    title: item.description,
+                    targetDate: item.targetDate,
+                    roadmap: roadmap.title,
+                    type: roadmap.type
+                })))
+            .sort((first, second) => first.targetDate - second.targetDate);
+
+        await Promise.all(dueRevisionTopics.map((topic) => Notification.findOneAndUpdate(
+            { user: req.user._id, type: "revision-due", topic: topic._id, dueDate: topic.revisionDate },
+            {
+                $setOnInsert: {
+                    message: `Revision due: ${topic.name}`,
+                    type: "revision-due",
+                    user: req.user._id,
+                    topic: topic._id,
+                    dueDate: topic.revisionDate
+                }
+            },
+            { upsert: true, new: true }
+        )));
 
         const recentActivity = [
             ...recentSolvedProblems.map((problem) => ({

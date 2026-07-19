@@ -1,5 +1,21 @@
 const mongoose = require("mongoose");
 
+const roadmapItemSchema = new mongoose.Schema(
+    {
+        description: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        targetDate: Date,
+        completed: {
+            type: Boolean,
+            default: false
+        }
+    },
+    { timestamps: true }
+);
+
 const roadmapSchema = new mongoose.Schema(
     {
         user: {
@@ -13,15 +29,17 @@ const roadmapSchema = new mongoose.Schema(
             required: true,
             trim: true
         },
-        description: String,
-        status: {
+        type: {
             type: String,
-            default: "planned"
+            enum: ["daily", "weekly", "monthly"],
+            default: "weekly"
+        },
+        items: {
+            type: [roadmapItemSchema],
+            default: []
         }
     },
-    {
-        timestamps: true
-    }
+    { timestamps: true }
 );
 
 module.exports = mongoose.model("Roadmap", roadmapSchema);

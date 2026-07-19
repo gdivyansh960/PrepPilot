@@ -8,25 +8,37 @@ const interviewSchema = new mongoose.Schema(
             required: true,
             index: true
         },
+        question: {
+            type: String,
+            required: true,
+            trim: true
+        },
+        category: {
+            type: String,
+            enum: ["technical", "HR", "behavioral"],
+            required: true
+        },
         company: {
             type: String,
-            required: true,
-            trim: true
+            trim: true,
+            default: ""
         },
-        role: {
+        notes: {
             type: String,
-            required: true,
-            trim: true
+            default: ""
         },
-        scheduledAt: Date,
-        status: {
-            type: String,
-            default: "scheduled"
+        practiced: {
+            type: Boolean,
+            default: false
+        },
+        confidence: {
+            type: Number,
+            min: 1,
+            max: 5,
+            default: null
         }
     },
-    {
-        timestamps: true
-    }
+    { timestamps: true }
 );
 
 module.exports = mongoose.model("Interview", interviewSchema);

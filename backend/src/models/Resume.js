@@ -8,20 +8,32 @@ const resumeSchema = new mongoose.Schema(
             required: true,
             index: true
         },
-        title: {
+        fileName: {
             type: String,
             required: true,
             trim: true
         },
-        fileUrl: String,
-        isPrimary: {
-            type: Boolean,
-            default: false
+        filePath: {
+            type: String,
+            required: true
+        },
+        version: {
+            type: Number,
+            required: true,
+            min: 1
+        },
+        notes: {
+            type: String,
+            default: ""
+        },
+        uploadedAt: {
+            type: Date,
+            default: Date.now
         }
     },
-    {
-        timestamps: true
-    }
+    { timestamps: true }
 );
+
+resumeSchema.index({ user: 1, version: 1 }, { unique: true });
 
 module.exports = mongoose.model("Resume", resumeSchema);

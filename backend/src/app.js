@@ -4,6 +4,10 @@ const authRoutes = require("./routes/authRoutes");
 const topicRoutes = require("./routes/topicRoutes");
 const problemRoutes = require("./routes/problemRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
+const roadmapRoutes = require("./routes/roadmapRoutes");
+const interviewRoutes = require("./routes/interviewRoutes");
+const resumeRoutes = require("./routes/resumeRoutes");
+const notificationRoutes = require("./routes/notificationRoutes");
 const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 
 const app = express();
@@ -16,6 +20,10 @@ app.use("/api/auth", authRoutes);
 app.use("/api/topics", topicRoutes);
 app.use("/api/problems", problemRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/roadmap", roadmapRoutes);
+app.use("/api/interviews", interviewRoutes);
+app.use("/api/resume", resumeRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 app.get("/", (req, res) => {
     res.send("Welcome to PrepPilot Backend!");

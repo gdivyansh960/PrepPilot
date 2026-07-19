@@ -8,23 +8,30 @@ const notificationSchema = new mongoose.Schema(
             required: true,
             index: true
         },
-        title: {
+        message: {
             type: String,
             required: true,
             trim: true
         },
-        message: {
+        type: {
             type: String,
-            required: true
+            enum: ["revision-due", "streak", "system"],
+            default: "system"
         },
-        isRead: {
+        read: {
             type: Boolean,
             default: false
-        }
+        },
+        topic: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Topic"
+        },
+        dueDate: Date
     },
-    {
-        timestamps: true
-    }
+    { timestamps: true }
 );
+
+notificationSchema.index({ user: 1, createdAt: -1 });
+notificationSchema.index({ user: 1, type: 1, topic: 1, dueDate: 1 });
 
 module.exports = mongoose.model("Notification", notificationSchema);
