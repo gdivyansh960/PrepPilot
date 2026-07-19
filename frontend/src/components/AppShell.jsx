@@ -1,11 +1,15 @@
 import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
+import NotificationBell from './NotificationBell'
 
 const navigation = [
   { to: '/dashboard', label: 'Dashboard', icon: '◫' },
   { to: '/topics', label: 'Topics', icon: '◌' },
   { to: '/problems', label: 'Problems', icon: '⌁' },
+  { to: '/roadmap', label: 'Roadmap', icon: '▱' },
+  { to: '/interview', label: 'Interview prep', icon: '◎' },
+  { to: '/resume', label: 'Resume', icon: '↗' },
   { to: '/profile', label: 'Profile', icon: '◉' },
   { to: '/settings', label: 'Settings', icon: '⚙' },
 ]
@@ -38,6 +42,7 @@ function Navigation({ onNavigate }) {
           </NavLink>
         ))}
       </div>
+      <div className="mt-5 border-t border-slate-200 pt-4"><div className="flex items-center justify-between px-3"><span className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">Updates</span><NotificationBell /></div></div>
       <button type="button" onClick={handleLogout} className="mt-auto flex items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-slate-500 transition hover:bg-rose-50 hover:text-rose-600">
         <span className="w-4 text-center">↪</span>Logout
       </button>
@@ -57,7 +62,7 @@ export default function AppShell({ children }) {
       <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-white/90 px-4 backdrop-blur lg:hidden">
         <button type="button" onClick={() => setMenuOpen(true)} className="rounded-lg p-2 text-slate-600 hover:bg-slate-100" aria-label="Open navigation">☰</button>
         <NavLink to="/dashboard" className="text-sm font-bold tracking-tight text-slate-900">PrepPilot <span className="text-violet-600">AI</span></NavLink>
-        <span className="grid h-8 w-8 place-items-center rounded-full bg-violet-100 text-xs font-bold text-violet-700">{user?.name?.[0]?.toUpperCase() || 'U'}</span>
+        <div className="flex items-center gap-2"><NotificationBell /><span className="grid h-8 w-8 place-items-center rounded-full bg-violet-100 text-xs font-bold text-violet-700">{user?.name?.[0]?.toUpperCase() || 'U'}</span></div>
       </header>
       {menuOpen && (
         <div className="fixed inset-0 z-40 bg-slate-950/30 lg:hidden" onMouseDown={() => setMenuOpen(false)}>

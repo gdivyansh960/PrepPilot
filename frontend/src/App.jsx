@@ -11,6 +11,9 @@ import NotFoundPage from './pages/NotFoundPage'
 import ProblemsPage from './pages/ProblemsPage'
 import ProfilePage from './pages/ProfilePage'
 import RegisterPage from './pages/RegisterPage'
+import RoadmapPage from './pages/RoadmapPage'
+import InterviewPage from './pages/InterviewPage'
+import ResumePage from './pages/ResumePage'
 import SettingsPage from './pages/SettingsPage'
 import TopicsPage from './pages/TopicsPage'
 
@@ -46,6 +49,9 @@ function AnimatedRoutes() {
         <Route path="/dashboard" element={<PrivatePage><DashboardPage /></PrivatePage>} />
         <Route path="/topics" element={<PrivatePage><TopicsPage /></PrivatePage>} />
         <Route path="/problems" element={<PrivatePage><ProblemsPage /></PrivatePage>} />
+        <Route path="/roadmap" element={<PrivatePage><RoadmapPage /></PrivatePage>} />
+        <Route path="/interview" element={<PrivatePage><InterviewPage /></PrivatePage>} />
+        <Route path="/resume" element={<PrivatePage><ResumePage /></PrivatePage>} />
         <Route path="/profile" element={<PrivatePage><ProfilePage /></PrivatePage>} />
         <Route path="/settings" element={<PrivatePage><SettingsPage /></PrivatePage>} />
         <Route path="*" element={<NotFoundPage />} />
