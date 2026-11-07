@@ -262,7 +262,7 @@ export default function LandingPage() {
           </div>
         </motion.section>
 
-        <section className="mx-auto max-w-6xl px-5 py-20 sm:px-7 sm:py-28">
+        <section id="about" className="mx-auto max-w-6xl scroll-mt-8 px-5 py-20 sm:px-7 sm:py-28">
           <motion.div
             className="max-w-2xl"
             {...reveal({ opacity: 0, x: -22, scale: 0.98 })}
@@ -408,9 +408,9 @@ export default function LandingPage() {
             </p>
           </div>
           <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm font-medium text-slate-500">
-            <a href="#">About</a>
-            <a href="#">GitHub</a>
-            <a href="#">Contact</a>
+            <a href="#about">About</a>
+            <a href="https://github.com/gdivyansh960" target="_blank" rel="noreferrer">GitHub</a>
+            <a href="https://linkedin.com/in/divyansh-gupta65" target="_blank" rel="noreferrer">Contact</a>
           </div>
         </div>
       </footer>
